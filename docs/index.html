@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cafeteria Order System</title>
+  <!-- Firebase Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-auth-compat.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .status {
+      display: flex;
+      justify-content: space-around;
+      gap: 2rem;
+      margin: 20px 0;
+    }
+    .status div {
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      width: 45%;
+      background-color: #fff;
+    }
+    .order {
+      margin: 5px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #f1f1f1;
+    }
+    .empty {
+      color: #888;
+      font-style: italic;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cafeteria Order System</h1>
+  <div class="status">
+    <div id="pending-orders">
+      <h2>Pending Orders</h2>
+    </div>
+    <div id="ready-orders">
+      <h2>Ready Orders</h2>
+    </div>
+  </div>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCh-yIyBoOiPsshf2ANPeWmXZ4FF_HNgj0",
+      authDomain: "queue-management-system-21507.firebaseapp.com",
+      databaseURL: "https://queue-management-system-21507-default-rtdb.firebaseio.com/",
+      projectId: "queue-management-system-21507",
+      storageBucket: "queue-management-system-21507.firebasestorage.app",
+      messagingSenderId: "32846305594",
+      appId: "1:32846305594:web:bb3e35ba3bc9ac60151803"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const auth = firebase.auth();
+
+    // Sign in anonymously
+    auth.signInAnonymously()
+      .then(() => {
+        console.log("Signed in anonymously");
+
+        // Reference to orders node
+        const ordersRef = database.ref("orders");
+        console.log("Connected to database. Fetching orders...");
+
+        // Fetch and listen for changes in the orders node
+        ordersRef.on("value", (snapshot) => {
+          console.log("Snapshot received from database:", snapshot.val());
+          const data = snapshot.val();
+          if (!data) {
+            renderOrders([], "pending-orders", "Pending");
+            renderOrders([], "ready-orders", "Ready");
+            return;
+          }
+
+          // Separate orders based on status
+          const pendingOrders = [];
+          const readyOrders = [];
+
+          Object.values(data).forEach((order) => {
+            if (order.status === "Pending") {
+              pendingOrders.push(order);
+            } else if (order.status === "Ready") {
+              readyOrders.push(order);
+            }
+          });
+
+          console.log("Pending Orders:", pendingOrders);
+          console.log("Ready Orders:", readyOrders);
+
+          // Render orders to their respective containers
+          renderOrders(pendingOrders, "pending-orders", "Pending");
+          renderOrders(readyOrders, "ready-orders", "Ready");
+        });
+      })
+      .catch((error) => {
+        console.error("Error during anonymous authentication:", error);
+      });
+
+    // Function to render orders into a container
+    function renderOrders(orders, containerId, status) {
+      console.log(`Rendering ${status} Orders:`, orders);
+      const container = document.getElementById(containerId);
+      container.innerHTML = `<h2>${status} Orders</h2>`;
+
+      if (orders.length === 0) {
+        const emptyMessage = document.createElement("div");
+        emptyMessage.className = "empty";
+        emptyMessage.innerText = "No orders available.";
+        container.appendChild(emptyMessage);
+        return;
+      }
+
+      orders.forEach((order) => {
+        const orderDiv = document.createElement("div");
+        orderDiv.className = "order";
+        orderDiv.innerText = `Order: ${order.orderNumber}`;
+        container.appendChild(orderDiv);
+      });
+    }
+  </script>
+</body>
+</html>
+
+<!-- asdfafadsf -->
