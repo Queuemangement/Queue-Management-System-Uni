@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title class = "titledesign">Cafeteria Order System</title>
+  <title class="titledesign">Cafeteria Order System</title>
   <!-- Firebase Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-database-compat.js"></script>
@@ -14,7 +14,8 @@
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 30px;
-    background-color: #f9f9f9;
+    background-color: rgba(148, 148, 148, 0.093);
+    position: relative; /* To ensure positioning of fixed elements */
   }
 
   h1 {
@@ -84,8 +85,9 @@
   .order {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #555;
-    margin: 5px 0;
+    color: #808083;
+    margin: 10px 0;
+    text-align: center; /* Center order numbers */
   }
 
   .order.ready {
@@ -95,6 +97,20 @@
   .separator {
     width: 2px;
     background-color: #ddd;
+  }
+
+  /* Fixed date-time styles */
+  .date-time {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ffffff;
+    color: #ff5500;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-align: center;
+    border-color: #000000;
   }
 
   @media (max-width: 768px) {
@@ -129,6 +145,10 @@
         <!-- Ready orders will be dynamically inserted here -->
       </ul>
     </div>
+  </div>
+
+  <div class="date-time" id="date-time">
+    <!-- Date and Time will be dynamically inserted here -->
   </div>
 
   <script>
@@ -212,6 +232,18 @@
         container.appendChild(orderLi);
       });
     }
+
+    // Function to update the date and time
+    function updateDateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const formattedDateTime = now.toLocaleDateString('en-US', options);
+      document.getElementById('date-time').innerText = formattedDateTime;
+    }
+
+    // Update the date-time every second
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
   </script>
 </body>
 </html>
