@@ -3,58 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cafeteria Order System</title>
+  <title class = "titledesign">Cafeteria Order System</title>
   <!-- Firebase Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-auth-compat.js"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f9f9f9;
+  /* General styles */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 30px;
+    background-color: #f9f9f9;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Invisible rectangle container */
+  .rectangle-container {
+    margin: auto;
+    padding: 20px;
+    border: 2px solid transparent; /* Invisible border */
+    max-width: 500px; /* Adjust to match the width of the red rectangle */
+    height: 800px; /* Adjust to match height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(158, 158, 158); /* Set background to match your design */
+  }
+
+  /* Status container styles */
+  .status-container {
+    display: flex;
+    flex: 1;
+    width: 100%; /* Fit inside the rectangle */
+  }
+
+  .status {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .preparing {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .ready {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .preparing h2,
+  .ready h2 {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .preparing h2 {
+    background-color: #9e9e9e;
+  }
+
+  .ready h2 {
+    background-color: #ff6f00;
+  }
+
+  .order-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .order {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #555;
+    margin: 5px 0;
+  }
+
+  .order.ready {
+    color: #ff6f00;
+  }
+
+  .separator {
+    width: 2px;
+    background-color: #ddd;
+  }
+
+  @media (max-width: 768px) {
+    .status-container {
+      flex-direction: column;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
+
+    .separator {
+      display: none; /* Hide separator on small screens */
     }
-    .status {
-      display: flex;
-      justify-content: space-around;
-      gap: 2rem;
-      margin: 20px 0;
+
+    .preparing,
+    .ready {
+      flex: 1 1 100%; /* Stack the sections on smaller screens */
     }
-    .status div {
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      padding: 20px;
-      width: 45%;
-      background-color: #fff;
-    }
-    .order {
-      margin: 5px 0;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background-color: #f1f1f1;
-    }
-    .empty {
-      color: #888;
-      font-style: italic;
-      text-align: center;
-      margin-top: 20px;
-    }
+  }
   </style>
 </head>
 <body>
   <h1>Cafeteria Order System</h1>
-  <div class="status">
-    <div id="pending-orders">
-      <h2>Pending Orders</h2>
+  <div class="status-container">
+    <div class="status preparing">
+      <h2>Preparing</h2>
+      <ul id="pending-orders" class="order-list">
+        <!-- Pending orders will be dynamically inserted here -->
+      </ul>
     </div>
-    <div id="ready-orders">
-      <h2>Ready Orders</h2>
+    <div class="separator"></div>
+    <div class="status ready">
+      <h2>Ready for pickup</h2>
+      <ul id="ready-orders" class="order-list">
+        <!-- Ready orders will be dynamically inserted here -->
+      </ul>
     </div>
   </div>
 
@@ -122,7 +195,7 @@
     function renderOrders(orders, containerId, status) {
       console.log(`Rendering ${status} Orders:`, orders);
       const container = document.getElementById(containerId);
-      container.innerHTML = `<h2>${status} Orders</h2>`;
+      container.innerHTML = "";
 
       if (orders.length === 0) {
         const emptyMessage = document.createElement("div");
@@ -133,14 +206,12 @@
       }
 
       orders.forEach((order) => {
-        const orderDiv = document.createElement("div");
-        orderDiv.className = "order";
-        orderDiv.innerText = `Order: ${order.orderNumber}`;
-        container.appendChild(orderDiv);
+        const orderLi = document.createElement("li");
+        orderLi.className = `order ${status.toLowerCase()}`;
+        orderLi.innerText = `${order.orderNumber}`;
+        container.appendChild(orderLi);
       });
     }
   </script>
 </body>
 </html>
-
-<!-- asdfafadsf -->
