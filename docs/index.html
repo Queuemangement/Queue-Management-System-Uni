@@ -162,47 +162,53 @@
       messagingSenderId: "32846305594",
       appId: "1:32846305594:web:bb3e35ba3bc9ac60151803"
     };
-
+  
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     const auth = firebase.auth();
-
+  
+    // Create audio objects
+    const audioPending = new Audio("audio1.mp3"); // Replace with your audio file for pending orders
+    const audioReady = new Audio("audio2.mp3");   // Replace with your audio file for ready orders
+  
+    // Store previously displayed orders
+    let previousPendingOrders = [];
+    let previousReadyOrders = [];
+  
     // Sign in anonymously
     auth.signInAnonymously()
       .then(() => {
         console.log("Signed in anonymously");
-
+  
         // Reference to orders node
         const ordersRef = database.ref("orders");
-        console.log("Connected to database. Fetching orders...");
-
+  
         // Fetch and listen for changes in the orders node
         ordersRef.on("value", (snapshot) => {
-          console.log("Snapshot received from database:", snapshot.val());
-          const data = snapshot.val();
-          if (!data) {
-            renderOrders([], "pending-orders", "Pending");
-            renderOrders([], "ready-orders", "Ready");
-            return;
-          }
-
+          const data = snapshot.val() || {};
+  
           // Separate orders based on status
           const pendingOrders = [];
           const readyOrders = [];
-
+  
           Object.values(data).forEach((order) => {
             if (order.status === "Pending") {
-              pendingOrders.push(order);
+              pendingOrders.push(order.orderNumber);
             } else if (order.status === "Ready") {
-              readyOrders.push(order);
+              readyOrders.push(order.orderNumber);
             }
           });
-
-          console.log("Pending Orders:", pendingOrders);
-          console.log("Ready Orders:", readyOrders);
-
-          // Render orders to their respective containers
+  
+          // Check for new orders and play audio
+          detectNewOrders(previousPendingOrders, pendingOrders, audioPending, "Pending");
+          detectNewOrders(previousReadyOrders, readyOrders, audioReady, "Ready");
+  
+          // Update previous orders
+          previousPendingOrders = [...pendingOrders];
+          previousReadyOrders = [...readyOrders];
+  
+          // Render orders
           renderOrders(pendingOrders, "pending-orders", "Pending");
           renderOrders(readyOrders, "ready-orders", "Ready");
         });
@@ -210,13 +216,21 @@
       .catch((error) => {
         console.error("Error during anonymous authentication:", error);
       });
-
+  
+    // Function to detect new orders and play corresponding audio
+    function detectNewOrders(previousOrders, currentOrders, audio, status) {
+      const newOrders = currentOrders.filter(order => !previousOrders.includes(order));
+      if (newOrders.length > 0) {
+        console.log(`New ${status} Orders:`, newOrders);
+        audio.play();
+      }
+    }
+  
     // Function to render orders into a container
     function renderOrders(orders, containerId, status) {
-      console.log(`Rendering ${status} Orders:`, orders);
       const container = document.getElementById(containerId);
       container.innerHTML = "";
-
+  
       if (orders.length === 0) {
         const emptyMessage = document.createElement("div");
         emptyMessage.className = "empty";
@@ -224,15 +238,15 @@
         container.appendChild(emptyMessage);
         return;
       }
-
+  
       orders.forEach((order) => {
         const orderLi = document.createElement("li");
         orderLi.className = `order ${status.toLowerCase()}`;
-        orderLi.innerText = `${order.orderNumber}`;
+        orderLi.innerText = `${order}`;
         container.appendChild(orderLi);
       });
     }
-
+  
     // Function to update the date and time
     function updateDateTime() {
       const now = new Date();
@@ -240,10 +254,11 @@
       const formattedDateTime = now.toLocaleDateString('en-US', options);
       document.getElementById('date-time').innerText = formattedDateTime;
     }
-
+  
     // Update the date-time every second
     setInterval(updateDateTime, 1000);
     updateDateTime();
   </script>
+  
 </body>
 </html>
