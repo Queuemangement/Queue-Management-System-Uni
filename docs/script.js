@@ -13,8 +13,8 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const auth = firebase.auth();
 
-const audioPending = new Audio("assets/audio/audio1.mp3");
-const audioReady = new Audio("assets/audio/audio2.mp3");
+const audioPending = new Audio("Assets/audio/audio1.mp3");
+const audioReady = new Audio("Assets/audio/audio2.mp3");
 let previousPendingOrders = [];
 let previousReadyOrders = [];
 let currentLanguage = "en"; // Start with English
@@ -30,7 +30,7 @@ function toggleDarkMode() {
 
     // Wait for the transition to complete, then change the icon
     setTimeout(() => {
-        darkModeIcon.src = isDarkMode ? "assets/images/sun.png" : "assets/images/moon.png";
+        darkModeIcon.src = isDarkMode ? "Assets/images/sun.png" : "Assets/images/moon.png";
         darkModeIcon.alt = isDarkMode ? "Light Mode Icon" : "Dark Mode Icon";
         darkModeIcon.classList.remove("fade-out");
     }, 300); // Duration matches the CSS transition
@@ -44,7 +44,7 @@ window.onload = function () {
     const darkModeIcon = document.getElementById("dark-mode-icon");
 
     document.body.classList.toggle("dark-mode", isDarkMode);
-    darkModeIcon.src = isDarkMode ? "assets/images/sun.png" : "assets/images/moon.png";
+    darkModeIcon.src = isDarkMode ? "Assets/images/sun.png" : "Assets/images/moon.png";
     darkModeIcon.alt = isDarkMode ? "Light Mode Icon" : "Dark Mode Icon";
 
     updateDateTime(); // Initialize time display
