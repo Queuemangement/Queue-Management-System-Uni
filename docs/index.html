@@ -1,42 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title class="titledesign">Cafeteria Order System</title>
-  <!-- Firebase Libraries -->
-  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-auth-compat.js"></script>
-  <!-- Link to CSS-->
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <h1 id="title">Cafeteria Order System</h1>
-  <div class="dark-mode-container" onclick="toggleDarkMode()">
-    <img id="dark-mode-icon" src="assets/images/moon.png" alt="Dark Mode Icon">
-    <div class="tooltip">Toggle Dark Mode</div>
-  </div>
-  <div class="status-container">
-    <div class="status preparing">
-      <h2 id="preparing-title">Preparing</h2>
-      <ul id="pending-orders" class="order-list">
-        <!-- Pending orders will be dynamically inserted here -->
-      </ul>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title class="titledesign">Cafeteria Order System</title>
+    <!-- Firebase Libraries -->
+    <script
+      src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app-compat.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/9.21.0/firebase-database-compat.js"></script>
+    <script
+      src="https://www.gstatic.com/firebasejs/9.21.0/firebase-auth-compat.js"></script>
+    <!-- Link to CSS-->
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1 id="title">Cafeteria Order System</h1>
+    <div class="dark-mode-container" onclick="toggleDarkMode()">
+      <img id="dark-mode-icon" src="assets/images/moon.png"
+        alt="Dark Mode Icon">
+      <div class="tooltip">Toggle Dark Mode</div>
     </div>
-    <div class="separator"></div>
-    <div class="status ready">
-      <h2 id="ready-title">Ready for pickup</h2>
-      <ul id="ready-orders" class="order-list">
-        <!-- Ready orders will be dynamically inserted here -->
-      </ul>
+    <div class="status-container">
+      <div class="status preparing">
+        <h2 id="preparing-title">Preparing</h2>
+        <ul id="pending-orders" class="order-list">
+          <!-- Pending orders will be dynamically inserted here -->
+        </ul>
+      </div>
+      <div class="separator"></div>
+      <div class="status ready">
+        <h2 id="ready-title">Ready for pickup</h2>
+        <ul id="ready-orders" class="order-list">
+          <!-- Ready orders will be dynamically inserted here -->
+        </ul>
+      </div>
     </div>
-  </div>
 
-  <div class="date-time" id="date-time">
-    <!-- Date and Time will be dynamically inserted here -->
-  </div>
-  <!-- Link to Script-->
-  <script src="script.js"></script>
-</body>
+    <div class="date-time" id="date-time">
+      <!-- Date and Time will be dynamically inserted here -->
+    </div>
+    <!-- Link to Script-->
+    <script src="script.js"></script>
+  </body>
 </html>
