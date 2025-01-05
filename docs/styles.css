@@ -1,0 +1,248 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 30px;
+    background-color: rgba(148, 148, 148, 0.093);
+    position: relative; /* To ensure positioning of fixed elements */
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  /* Invisible rectangle container */
+  .rectangle-container {
+    margin: auto;
+    padding: 20px;
+    border: 2px solid transparent; /* Invisible border */
+    max-width: 500px; /* Adjust to match the width of the red rectangle */
+    height: 800px; /* Adjust to match height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(158, 158, 158); /* Set background to match your design */
+  }
+
+  /* Status container styles */
+  .status-container {
+    display: flex;
+    flex: 1;
+    width: 100%; /* Fit inside the rectangle */
+  }
+
+  .status {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .preparing {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .ready {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .preparing h2,
+  .ready h2 {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .preparing h2 {
+    background-color: #9e9e9e;
+  }
+
+  .ready h2 {
+    background-color: #ff6f00;
+  }
+
+  .order-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .order {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #808083;
+    margin: 10px 0;
+    text-align: center; /* Center order numbers */
+  }
+
+  .order.ready {
+    color: #ff6f00;
+  }
+
+  .separator {
+    width: 2px;
+    background-color: #ddd;
+  }
+
+  /* Fixed date-time styles */
+  .date-time {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ffffff;
+    color: #ff5500;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-align: center;
+    border-color: #000000;
+  }
+
+  @media (max-width: 768px) {
+    .status-container {
+      flex-direction: column;
+    }
+
+    .separator {
+      display: none; /* Hide separator on small screens */
+    }
+
+    .preparing,
+    .ready {
+      flex: 1 1 100%; /* Stack the sections on smaller screens */
+    }
+  }
+    /* Dark Mode Switch Container */
+    .dark-mode-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    transition: color 0.3s;
+  }
+
+    /* Switch Text */
+    .dark-mode-container .switch-text {
+      font-weight: bold;
+    }
+
+    /* Toggle Switch Styles */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+    }
+
+    /* Hide Checkbox */
+    .toggle-switch input {
+      display: none;
+    }
+
+    /* Slider */
+    .toggle-switch .slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      border-radius: 30px;
+      transition: 0.4s;
+      cursor: pointer;
+    }
+
+    .toggle-switch .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+
+    /* Checked State */
+    .toggle-switch input:checked + .slider {
+      background-color: #ff6f00;
+    }
+
+    .toggle-switch input:checked + .slider:before {
+      transform: translateX(30px);
+    }
+
+    /* Dark Mode Styles */
+    body.dark-mode .dark-mode-container {
+      color: white;
+    }
+    /* Dark Mode */
+    body.dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+
+    body {
+  transition: background-color 0.5s, color 0.5s;
+} 
+.tooltip {
+  position: absolute;
+  top: -35px;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dark-mode-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.dark-mode-container img {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Hover Effect on Icon */
+.dark-mode-container:hover img {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* Tooltip */
+.dark-mode-container:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-10px);
+}
+
+.dark-mode-container img {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+}
+
+.dark-mode-container img.fade-out {
+  opacity: 0;
+  transform: scale(0.5);
+}

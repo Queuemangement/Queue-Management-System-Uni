@@ -8,139 +8,25 @@
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.21.0/firebase-auth-compat.js"></script>
-  <style>
-  /* General styles */
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 30px;
-    background-color: rgba(148, 148, 148, 0.093);
-    position: relative; /* To ensure positioning of fixed elements */
-  }
-
-  h1 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  /* Invisible rectangle container */
-  .rectangle-container {
-    margin: auto;
-    padding: 20px;
-    border: 2px solid transparent; /* Invisible border */
-    max-width: 500px; /* Adjust to match the width of the red rectangle */
-    height: 800px; /* Adjust to match height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(158, 158, 158); /* Set background to match your design */
-  }
-
-  /* Status container styles */
-  .status-container {
-    display: flex;
-    flex: 1;
-    width: 100%; /* Fit inside the rectangle */
-  }
-
-  .status {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-  }
-
-  .preparing {
-    text-align: center;
-    padding: 10px;
-  }
-
-  .ready {
-    text-align: center;
-    padding: 10px;
-  }
-
-  .preparing h2,
-  .ready h2 {
-    margin: 0 0 10px;
-    font-size: 1.2rem;
-    color: white;
-    padding: 10px;
-    text-align: center;
-  }
-
-  .preparing h2 {
-    background-color: #9e9e9e;
-  }
-
-  .ready h2 {
-    background-color: #ff6f00;
-  }
-
-  .order-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .order {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #808083;
-    margin: 10px 0;
-    text-align: center; /* Center order numbers */
-  }
-
-  .order.ready {
-    color: #ff6f00;
-  }
-
-  .separator {
-    width: 2px;
-    background-color: #ddd;
-  }
-
-  /* Fixed date-time styles */
-  .date-time {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #ffffff;
-    color: #ff5500;
-    padding: 10px 15px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    text-align: center;
-    border-color: #000000;
-  }
-
-  @media (max-width: 768px) {
-    .status-container {
-      flex-direction: column;
-    }
-
-    .separator {
-      display: none; /* Hide separator on small screens */
-    }
-
-    .preparing,
-    .ready {
-      flex: 1 1 100%; /* Stack the sections on smaller screens */
-    }
-  }
-  </style>
+  <!-- Link to CSS-->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Cafeteria Order System</h1>
+  <h1 id="title">Cafeteria Order System</h1>
+  <div class="dark-mode-container" onclick="toggleDarkMode()">
+    <img id="dark-mode-icon" src="assets/images/moon.png" alt="Dark Mode Icon">
+    <div class="tooltip">Toggle Dark Mode</div>
+  </div>
   <div class="status-container">
     <div class="status preparing">
-      <h2>Preparing</h2>
+      <h2 id="preparing-title">Preparing</h2>
       <ul id="pending-orders" class="order-list">
         <!-- Pending orders will be dynamically inserted here -->
       </ul>
     </div>
     <div class="separator"></div>
     <div class="status ready">
-      <h2>Ready for pickup</h2>
+      <h2 id="ready-title">Ready for pickup</h2>
       <ul id="ready-orders" class="order-list">
         <!-- Ready orders will be dynamically inserted here -->
       </ul>
@@ -150,115 +36,7 @@
   <div class="date-time" id="date-time">
     <!-- Date and Time will be dynamically inserted here -->
   </div>
-
-  <script>
-    // Firebase Configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyCh-yIyBoOiPsshf2ANPeWmXZ4FF_HNgj0",
-      authDomain: "queue-management-system-21507.firebaseapp.com",
-      databaseURL: "https://queue-management-system-21507-default-rtdb.firebaseio.com/",
-      projectId: "queue-management-system-21507",
-      storageBucket: "queue-management-system-21507.firebasestorage.app",
-      messagingSenderId: "32846305594",
-      appId: "1:32846305594:web:bb3e35ba3bc9ac60151803"
-    };
-  
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const auth = firebase.auth();
-  
-    // Create audio objects
-    const audioPending = new Audio("audio1.mp3"); // Replace with your audio file for pending orders
-    const audioReady = new Audio("meme.mp3");   // Replace with your audio file for ready orders
-  
-    // Store previously displayed orders
-    let previousPendingOrders = [];
-    let previousReadyOrders = [];
-  
-    // Sign in anonymously
-    auth.signInAnonymously()
-      .then(() => {
-        console.log("Signed in anonymously");
-  
-        // Reference to orders node
-        const ordersRef = database.ref("orders");
-  
-        // Fetch and listen for changes in the orders node
-        ordersRef.on("value", (snapshot) => {
-          const data = snapshot.val() || {};
-  
-          // Separate orders based on status
-          const pendingOrders = [];
-          const readyOrders = [];
-  
-          Object.values(data).forEach((order) => {
-            if (order.status === "Pending") {
-              pendingOrders.push(order.orderNumber);
-            } else if (order.status === "Ready") {
-              readyOrders.push(order.orderNumber);
-            }
-          });
-  
-          // Check for new orders and play audio
-          detectNewOrders(previousPendingOrders, pendingOrders, audioPending, "Pending");
-          detectNewOrders(previousReadyOrders, readyOrders, audioReady, "Ready");
-  
-          // Update previous orders
-          previousPendingOrders = [...pendingOrders];
-          previousReadyOrders = [...readyOrders];
-  
-          // Render orders
-          renderOrders(pendingOrders, "pending-orders", "Pending");
-          renderOrders(readyOrders, "ready-orders", "Ready");
-        });
-      })
-      .catch((error) => {
-        console.error("Error during anonymous authentication:", error);
-      });
-  
-    // Function to detect new orders and play corresponding audio
-    function detectNewOrders(previousOrders, currentOrders, audio, status) {
-      const newOrders = currentOrders.filter(order => !previousOrders.includes(order));
-      if (newOrders.length > 0) {
-        console.log(`New ${status} Orders:`, newOrders);
-        audio.play();
-      }
-    }
-  
-    // Function to render orders into a container
-    function renderOrders(orders, containerId, status) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-  
-      if (orders.length === 0) {
-        const emptyMessage = document.createElement("div");
-        emptyMessage.className = "empty";
-        emptyMessage.innerText = "No orders available.";
-        container.appendChild(emptyMessage);
-        return;
-      }
-  
-      orders.forEach((order) => {
-        const orderLi = document.createElement("li");
-        orderLi.className = `order ${status.toLowerCase()}`;
-        orderLi.innerText = `${order}`;
-        container.appendChild(orderLi);
-      });
-    }
-  
-    // Function to update the date and time
-    function updateDateTime() {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      const formattedDateTime = now.toLocaleDateString('en-US', options);
-      document.getElementById('date-time').innerText = formattedDateTime;
-    }
-  
-    // Update the date-time every second
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-  </script>
-  
+  <!-- Link to Script-->
+  <script src="script.js"></script>
 </body>
 </html>
