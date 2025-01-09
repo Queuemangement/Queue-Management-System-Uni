@@ -1,260 +1,239 @@
-  body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 30px;
-      background-color: rgba(148, 148, 148, 0.093);
-      position: relative;
-      /* To ensure positioning of fixed elements */
-  }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 30px;
+    background-color: rgba(148, 148, 148, 0.093);
+    position: relative;
+    /* To ensure positioning of fixed elements */
+    transition: background-color 0.5s, color 0.5s;
+}
 
-  h1 {
-      text-align: center;
-      margin-bottom: 20px;
-  }
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-  /* Invisible rectangle container */
-  .rectangle-container {
-      margin: auto;
-      padding: 20px;
-      border: 2px solid transparent;
-      /* Invisible border */
-      max-width: 500px;
-      /* Adjust to match the width of the red rectangle */
-      height: 800px;
-      /* Adjust to match height */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: rgb(158, 158, 158);
-      /* Set background to match your design */
-  }
+/* Invisible rectangle container */
+.rectangle-container {
+    margin: auto;
+    padding: 20px;
+    border: 2px solid transparent;
+    /* Invisible border */
+    max-width: 500px;
+    height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(158, 158, 158);
+    /* Set background to match your design */
+}
 
-  /* Status container styles */
-  .status-container {
-      display: flex;
-      flex: 1;
-      width: 100%;
-      /* Fit inside the rectangle */
-  }
+/* Status container styles */
+.status-container {
+    display: flex;
+    width: 100%;
+    margin: 0; /* Remove any gap between the two sections */
+    padding: 0;
+    border: 0;
+}
 
-  .status {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-  }
+.status {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-  .preparing {
-      text-align: center;
-      padding: 10px;
-  }
+.preparing {
+    flex: 0.4;
+    text-align: center;
+    background-color: #e3e1e1;
+    /* border-right: 1px solid #000000; Removed border to eliminate gap */
+    padding: 10px 0 10;
+}
 
-  .ready {
-      text-align: center;
-      padding: 10px;
-  }
+.ready {
+    text-align: center;
+    /* background-color: #f5f5f5; */
+    padding: 10px 0 10;
+    border-left: none; /* Removed border to eliminate gap */
+}
 
-  .preparing h2,
-  .ready h2 {
-      margin: 0 0 10px;
-      font-size: 1.2rem;
-      color: white;
-      padding: 10px;
-      text-align: center;
-  }
+.separator {
+    display: none; /* Ensure this doesn't take up space */
+}
 
-  .preparing h2 {
-      background-color: #9e9e9e;
-  }
+.preparing h2,
+.ready h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
 
-  .ready h2 {
-      background-color: #ff6f00;
-  }
+.preparing h2 {
+    background-color: #9e9e9e;
+}
 
-  .order-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-  }
+.ready h2 {
+    background-color: #ff6f00;
+}
 
-  .order {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #808083;
-      margin: 10px 0;
-      text-align: center;
-      /* Center order numbers */
-  }
+.order-list {
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+}
 
+.order {
+    font-size: 4.5rem;
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+  .order.preparing {
+    color: #a6a6a6; /* Preparing orders color */
+  }
+  
   .order.ready {
-      color: #ff6f00;
+    color: #ff6f00; /* Ready orders color */
   }
 
-  .separator {
-      width: 2px;
-      background-color: #ddd;
-  }
+/* Fixed date-time styles */
+.date-time {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ffffff;
+    color: #ff5500;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-align: center;
+    border-color: #000000;
+}
 
-  /* Fixed date-time styles */
-  .date-time {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: #ffffff;
-      color: #ff5500;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 0.9rem;
-      text-align: center;
-      border-color: #000000;
-  }
+@media (max-width: 768px) {
+    .status-container {
+        flex-direction: column;
+    }
 
-  @media (max-width: 768px) {
-      .status-container {
-          flex-direction: column;
-      }
+    .separator {
+        display: none;
+        /* Hide separator on small screens */
+    }
 
-      .separator {
-          display: none;
-          /* Hide separator on small screens */
-      }
+    .preparing,
+    .ready {
+        flex: 1 1 100%;
+        /* Stack the sections on smaller screens */
+    }
+}
+.preparing, .ready {
+    transition: background-color 0.5s, color 0.5s;
+}
 
-      .preparing,
-      .ready {
-          flex: 1 1 100%;
-          /* Stack the sections on smaller screens */
-      }
-  }
+/* Dark mode styles for Preparing and Ready */
+body.dark-mode .preparing {
+    background-color: #2e2e2e; /* Darker gray for Preparing section */
+    /* color: #ffffff; Light text for better visibility */
+    /* border-right: 1px solid #ffffff; */
+}
 
-  /* Dark Mode Switch Container */
-  .dark-mode-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-      gap: 10px;
-      font-size: 1rem;
-      font-weight: bold;
-      color: #333;
-      transition: color 0.3s;
-  }
+body.dark-mode .ready {
+    /* background-color: #3e3e3e; /* Slightly different dark gray for Ready section */
+    color: white; /* Orange text for a highlight effect */
+}
 
-  /* Switch Text */
-  .dark-mode-container .switch-text {
-      font-weight: bold;
-  }
+/* Dark Mode Switch Container */
+.dark-mode-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    transition: color 0.3s;
+}
 
-  /* Toggle Switch Styles */
-  .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 30px;
-  }
+/* Switch Text */
+.dark-mode-container .switch-text {
+    font-weight: bold;
+}
 
-  /* Hide Checkbox */
-  .toggle-switch input {
-      display: none;
-  }
+/* Toggle Switch Styles */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
 
-  /* Slider */
-  .toggle-switch .slider {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      border-radius: 30px;
-      transition: 0.4s;
-      cursor: pointer;
-  }
+/* Dark Mode Styles */
+body.dark-mode .dark-mode-container {
+    color: white;
+}
 
-  .toggle-switch .slider:before {
-      position: absolute;
-      content: "";
-      height: 22px;
-      width: 22px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      border-radius: 50%;
-      transition: 0.4s;
-  }
+/* Dark Mode */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
 
-  /* Checked State */
-  .toggle-switch input:checked+.slider {
-      background-color: #ff6f00;
-  }
+.tooltip {
+    position: absolute;
+    top: -35px;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
 
-  .toggle-switch input:checked+.slider:before {
-      transform: translateX(30px);
-  }
+.dark-mode-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    cursor: pointer;
+}
 
-  /* Dark Mode Styles */
-  body.dark-mode .dark-mode-container {
-      color: white;
-  }
+.dark-mode-container img {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
 
-  /* Dark Mode */
-  body.dark-mode {
-      background-color: #121212;
-      color: #ffffff;
-  }
+/* Hover Effect on Icon */
+.dark-mode-container:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
 
-  body {
-      transition: background-color 0.5s, color 0.5s;
-  }
+/* Tooltip */
+.dark-mode-container:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-10px);
+}
 
-  .tooltip {
-      position: absolute;
-      top: -35px;
-      right: 0;
-      background-color: rgba(0, 0, 0, 0.75);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 0.8rem;
-      white-space: nowrap;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-  }
+.dark-mode-container img {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+}
 
-  .dark-mode-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-      cursor: pointer;
-  }
-
-  .dark-mode-container img {
-      width: 40px;
-      height: 40px;
-      transition: transform 0.3s ease, filter 0.3s ease;
-  }
-
-  /* Hover Effect on Icon */
-  .dark-mode-container:hover img {
-      transform: scale(1.1);
-      filter: brightness(1.2);
-  }
-
-  /* Tooltip */
-  .dark-mode-container:hover .tooltip {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(-10px);
-  }
-
-  .dark-mode-container img {
-      width: 40px;
-      height: 40px;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      opacity: 1;
-  }
-
-  .dark-mode-container img.fade-out {
-      opacity: 0;
-      transform: scale(0.5);
-  }
+.dark-mode-container img.fade-out {
+    opacity: 0;
+    transform: scale(0.5);
+}
